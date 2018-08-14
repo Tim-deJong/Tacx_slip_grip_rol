@@ -1,6 +1,14 @@
 import wx as wx
 import sys
+import matplotlib
+import wxmplot
+from numpy import array
+
 from os import path
+
+#TODO: Plot maken: Bij veranderen sliders lijnen laten veranderen
+#TODO: Plot als functie van snelheid maken, met variabele lijnen etc...
+
 
 
 class Main(wx.Frame):
@@ -9,7 +17,7 @@ class Main(wx.Frame):
         """
 
         wx.Frame.__init__(self, parent, title=title,
-                          style=wx.DEFAULT_FRAME_STYLE & ~(wx.RESIZE_BORDER | wx.MAXIMIZE_BOX), size=(500, 530))
+                          style=wx.DEFAULT_FRAME_STYLE & ~(wx.RESIZE_BORDER | wx.MAXIMIZE_BOX), size=(1030, 600))
         self.top_panel = wx.Panel(self)
         self.SetBackgroundColour("white")
 
@@ -39,7 +47,7 @@ class Main(wx.Frame):
         image_file_png = wx.Image(image_path, wx.BITMAP_TYPE_PNG)
         image_file_png.Rescale(image_file_png.GetWidth() * 0.15, image_file_png.GetHeight() * 0.15)
         image_file_png = wx.Bitmap(image_file_png)
-        self.image = wx.StaticBitmap(self.top_panel, -1, image_file_png, pos=(335, 260),
+        self.image = wx.StaticBitmap(self.top_panel, -1, image_file_png, pos=(335, 167),
                                      size=(image_file_png.GetWidth(), image_file_png.GetHeight()))
 
         # 5: Creating panels
@@ -50,37 +58,39 @@ class Main(wx.Frame):
         self.statistics_titles = ["Roller diameter", "Contact force between roller and wheel"]
 
         for i in range(len(self.statistics_titles)):
-            self.data_panel = wx.Panel(self.top_panel, -1, size=(465, 100), pos=(10, 10 + (1.2*i) * 90))
+            self.data_panel = wx.Panel(self.top_panel, -1, size=(465, 100), pos=(10, 10 + (1.2*i) * 60))
             self.data_panel_header = wx.StaticText(self.data_panel, label=self.statistics_titles[i], pos=(4, 2))
             if i == 0:
-                self.slider_1 = wx.Slider(self.data_panel, -1, 30, 20, 70, pos=(0, 40), size=(300, -1))
-                self.panel_output_1 = wx.Panel(self.data_panel, -1, style=wx.BORDER_SUNKEN, size=(40, 27), pos=(350, 35))
-                self.text_1 = wx.StaticText(self.data_panel, label='mm', pos=(395, 38))
+                self.slider_1 = wx.Slider(self.data_panel, -1, 30, 20, 70, pos=(0, 25), size=(300, -1), style=wx.SL_HORIZONTAL | wx.SL_AUTOTICKS)
+                self.slider_1.SetTickFreq(10)
+                self.panel_output_1 = wx.Panel(self.data_panel, -1, style=wx.BORDER_SUNKEN, size=(40, 27), pos=(350, 20))
+                self.text_1 = wx.StaticText(self.data_panel, label='mm', pos=(395, 23))
                 self.text_1.SetFont(self.font_big)
                 self.data_panel_slider_1 = wx.StaticText(self.panel_output_1, label='30', pos=(14, 2))
                 self.data_panel_slider_1.SetFont(self.font_big)
             if i == 1:
-                self.slider_2 = wx.Slider(self.data_panel, -1, 400, 200, 800, pos=(0, 40), size=(300, -1))
-                self.panel_output_2 = wx.Panel(self.data_panel, -1, style=wx.BORDER_SUNKEN, size=(40, 27), pos=(350, 35))
-                self.text_1 = wx.StaticText(self.data_panel, label='N', pos=(395, 38))
+                self.slider_2 = wx.Slider(self.data_panel, -1, 400, 200, 800, pos=(0, 25), size=(300, -1), style=wx.SL_HORIZONTAL | wx.SL_AUTOTICKS)
+                self.slider_2.SetTickFreq(100)
+                self.panel_output_2 = wx.Panel(self.data_panel, -1, style=wx.BORDER_SUNKEN, size=(40, 27), pos=(350, 20))
+                self.text_1 = wx.StaticText(self.data_panel, label='N', pos=(395, 23))
                 self.text_1.SetFont(self.font_big)
                 self.data_panel_slider_2 = wx.StaticText(self.panel_output_2, label='400', pos=(4, 2))
                 self.data_panel_slider_2.SetFont(self.font_big)
             self.data_panel_header.SetFont(self.font_header)
 
-        self.output_panel = wx.Panel(self.top_panel, -1, style=wx.BORDER_RAISED, size=(300, 200), pos=(10, 220))
+        self.output_panel = wx.Panel(self.top_panel, -1, style=wx.BORDER_RAISED, size=(295, 73), pos=(10, 150))
         self.text = wx.StaticText(self.output_panel, label='Calculated friction force: \n(bigger = better)', pos=(14, 2))
         self.text.SetFont(self.font_header_1)
-        self.text = wx.StaticText(self.output_panel, label='Calculated rolling resistance: \n(smaller = better)', pos=(14, 90))
+        self.text = wx.StaticText(self.output_panel, label='Calculated rolling resistance: \n(smaller = better)', pos=(14, 40))
         self.text.SetFont(self.font_header_1)
-        self.panel_output_3 = wx.Panel(self.output_panel, -1, style=wx.BORDER_SUNKEN, size=(40, 27), pos=(180, 42))
-        self.data_output_text = wx.StaticText(self.output_panel, label='N', pos=(225, 45))
+        self.panel_output_3 = wx.Panel(self.output_panel, -1, style=wx.BORDER_SUNKEN, size=(40, 27), pos=(180, 2))
+        self.data_output_text = wx.StaticText(self.output_panel, label='N', pos=(230, 6))
         self.data_output_text.SetFont(self.font_big)
         self.data_panel_friction= wx.StaticText(self.panel_output_3, label='30', pos=(14, 2))
         self.data_panel_friction.SetFont(self.font_big)
 
-        self.panel_output_4 = wx.Panel(self.output_panel, -1, style=wx.BORDER_SUNKEN, size=(40, 27), pos=(180, 130))
-        self.data_output_text = wx.StaticText(self.output_panel, label='N', pos=(225, 133))
+        self.panel_output_4 = wx.Panel(self.output_panel, -1, style=wx.BORDER_SUNKEN, size=(40, 27), pos=(180, 40))
+        self.data_output_text = wx.StaticText(self.output_panel, label='N', pos=(230, 44))
         self.data_output_text.SetFont(self.font_big)
         self.data_panel_resistance= wx.StaticText(self.panel_output_4, label='30', pos=(14, 2))
         self.data_panel_resistance.SetFont(self.font_big)
@@ -119,7 +129,26 @@ class Main(wx.Frame):
         self.reset_button.Bind(wx.EVT_BUTTON, self.on_reset)
         self.reset_button.Bind(wx.EVT_ENTER_WINDOW, self.on_reset_widget_enter)
 
+
+
+        # Create initial plot
+        self.figure_panel = wx.Panel(self.top_panel, -1, size=(540, 540), pos=(480, 10))
+        self.figure_panel.SetBackgroundColour((255, 255, 255))
+        self.figure = wxmplot.PlotPanel(self.figure_panel, size=(540, 540), dpi=100, fontsize=2, axisbg='#FFFFFF')
+        self.figure.oplot(array(self.testdata[0]), array(self.testdata[1]))
+
+        # Figure cosmetics
+        self.figure.set_xlabel("Velocity [km/h]")
+        self.figure.set_ylabel("Value")
+        # self.figure = Figure()
+        # self.plot = self.figure.add_subplot(111)
+        # self.canvas = FigureCanvas(self.figure_panel, -1, self.figure)
+        # self.sizer = wx.BoxSizer(wx.HORIZONTAL)
+        # self.sizer.Add(self.canvas, 1, wx.LEFT | wx.TOP | wx.GROW)
+        # self.SetSizer(self.sizer)
+        # self.Fit()
         # Some variables needed
+
         self.value_slider_1 = self.slider_1.GetValue()
         self.value_slider_2 = self.slider_2.GetValue()
         self.interpolation()
@@ -167,12 +196,17 @@ class Main(wx.Frame):
         self.data_panel_resistance.SetLabel(str(int(self.rolling_resistance)))
         self.data_panel_friction.SetLabel(str(int(self.friction)))
 
+        # Updating the plot
+        #TODO: Redrawen werkt, nu nog met de goeie data vermenigvuldigen enzo
+        self.figure.update_line(1, array(self.testdata[0]), self.value_slider_1 * array(self.testdata[1]), draw=True)
+
+
     def on_about(self, e):
         """"Message box with OK button"""
-        prompted_dialog = wx.MessageDialog(self, "A file which can be used by designing a new Tacx \n"
+        prompted_dialog = wx.MessageDialog(self, "A file which can be used for designing a new Tacx \n"
                                                  "roller trainer and give an indication for the \n"
                                                  "rolling resistance and occurring friction. \n"
-                                                 "\n"
+                                                 "\n\n"
                                                  "Built in Python 3.6.6, compiled with PyInstaller"
                                                  "\n"
                                                  "\n"
