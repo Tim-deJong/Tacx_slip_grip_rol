@@ -126,7 +126,6 @@ class Main(wx.Frame):
 
     def interpolation(self):
         dummy = []
-        print('hello')
         for i in range(len(self.testdata)):
             if abs(self.testdata[i][0] - self.value_slider_1) <= 9 and abs(self.testdata[i][1] - self.value_slider_2) <= 99:
                 dummy.append(self.testdata[i])
