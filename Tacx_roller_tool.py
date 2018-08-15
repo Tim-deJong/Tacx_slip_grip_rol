@@ -50,19 +50,19 @@ class Main(wx.Frame):
         self.statistics_titles = ["Roller diameter", "Contact force between roller and wheel"]
 
         for i in range(len(self.statistics_titles)):
-            self.data_panel = wx.Panel(self.top_panel, -1, size=(465, 100), pos=(10, 10 + (1.2*i) * 90))
+            self.data_panel = wx.Panel(self.top_panel, -1, size=(465, 100), pos=(10, 10 + (1.2*i) * 60))
             self.data_panel_header = wx.StaticText(self.data_panel, label=self.statistics_titles[i], pos=(4, 2))
             if i == 0:
-                self.slider_1 = wx.Slider(self.data_panel, -1, 30, 20, 70, pos=(0, 40), size=(300, -1))
-                self.panel_output_1 = wx.Panel(self.data_panel, -1, style=wx.BORDER_SUNKEN, size=(40, 27), pos=(350, 35))
-                self.text_1 = wx.StaticText(self.data_panel, label='mm', pos=(395, 38))
+                self.slider_1 = wx.Slider(self.data_panel, -1, 30, 20, 70, pos=(0, 25), size=(300, -1), style=wx.SL_HORIZONTAL | wx.SL_AUTOTICKS)
+                self.panel_output_1 = wx.Panel(self.data_panel, -1, style=wx.BORDER_SUNKEN, size=(40, 27), pos=(350, 20))
+                self.text_1 = wx.StaticText(self.data_panel, label='mm', pos=(395, 23))
                 self.text_1.SetFont(self.font_big)
                 self.data_panel_slider_1 = wx.StaticText(self.panel_output_1, label='30', pos=(14, 2))
                 self.data_panel_slider_1.SetFont(self.font_big)
             if i == 1:
-                self.slider_2 = wx.Slider(self.data_panel, -1, 400, 200, 800, pos=(0, 40), size=(300, -1))
-                self.panel_output_2 = wx.Panel(self.data_panel, -1, style=wx.BORDER_SUNKEN, size=(40, 27), pos=(350, 35))
-                self.text_1 = wx.StaticText(self.data_panel, label='N', pos=(395, 38))
+                self.slider_2 = wx.Slider(self.data_panel, -1, 400, 200, 800, pos=(0, 25), size=(300, -1), style=wx.SL_HORIZONTAL | wx.SL_AUTOTICKS)
+                self.panel_output_2 = wx.Panel(self.data_panel, -1, style=wx.BORDER_SUNKEN, size=(40, 27), pos=(350, 20))
+                self.text_1 = wx.StaticText(self.data_panel, label='N', pos=(395, 23))
                 self.text_1.SetFont(self.font_big)
                 self.data_panel_slider_2 = wx.StaticText(self.panel_output_2, label='400', pos=(4, 2))
                 self.data_panel_slider_2.SetFont(self.font_big)
