@@ -1,8 +1,8 @@
 import wx as wx
 import sys
-import matplotlib
 import wxmplot
-from numpy import array
+import numpy
+import matplotlib
 from os import path
 
 
@@ -230,7 +230,7 @@ class Main(wx.Frame):
         self.figure_panel = wx.Panel(self.top_panel, -1, size=(400, 400), pos=(480, -20))
         self.figure_panel.SetBackgroundColour((255, 255, 255))
         self.figure = wxmplot.PlotPanel(self.figure_panel, size=(400, 400), dpi=100, fontsize=2, axisbg='#FFFFFF')
-        self.figure.oplot(array(self.speed), array(self.rolling_resistance), framecolor='white')
+        self.figure.oplot(numpy.array(self.speed), numpy.array(self.rolling_resistance), framecolor='white')
 
         # Figure cosmetics
         self.figure.set_xlabel("Velocity [km/h]")
@@ -303,7 +303,7 @@ class Main(wx.Frame):
 
         # Updating the plot
         if self.begin == False:
-            self.figure.update_line(1, array(self.speed), array(self.rolling_resistance), draw=True)
+            self.figure.update_line(1, numpy.array(self.speed), numpy.array(self.rolling_resistance), draw=True)
 
         self.begin = False
 
