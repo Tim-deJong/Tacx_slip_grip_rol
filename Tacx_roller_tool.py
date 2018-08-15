@@ -3,11 +3,7 @@ import sys
 import matplotlib
 import wxmplot
 from numpy import array
-
 from os import path
-
-#TODO: Plot maken: Bij veranderen sliders lijnen laten veranderen
-#TODO: Plot als functie van snelheid maken, met variabele lijnen etc...
 
 
 class Main(wx.Frame):
@@ -69,16 +65,16 @@ class Main(wx.Frame):
                 self.panel_output_1 = wx.Panel(self.data_panel, -1, style=wx.BORDER_SUNKEN, size=(40, 27), pos=(350, 20))
                 self.text_1 = wx.StaticText(self.data_panel, label='mm', pos=(395, 23))
                 self.text_1.SetFont(self.font_big)
-                self.data_panel_slider_1 = wx.StaticText(self.panel_output_1, label='30', pos=(14, 2))
+                self.data_panel_slider_1 = wx.StaticText(self.panel_output_1, label='30', pos=(4, 2))
                 self.data_panel_slider_1.SetFont(self.font_big)
             if i == 1:
                 # TODO: AANPASSEN ALS WE DE ECHTE INDRUKKING WETEN
-                self.slider_2 = wx.Slider(self.data_panel, -1, 3, 1, 7, pos=(0, 25), size=(300, -1), style=wx.SL_HORIZONTAL | wx.SL_AUTOTICKS)
-                self.slider_2.SetTickFreq(1)
+                self.slider_2 = wx.Slider(self.data_panel, -1, 30, 10, 70, pos=(0, 25), size=(300, -1), style=wx.SL_HORIZONTAL | wx.SL_AUTOTICKS)
+                self.slider_2.SetTickFreq(10)
                 self.panel_output_2 = wx.Panel(self.data_panel, -1, style=wx.BORDER_SUNKEN, size=(40, 27), pos=(350, 20))
                 self.text_1 = wx.StaticText(self.data_panel, label='mm', pos=(395, 23))
                 self.text_1.SetFont(self.font_big)
-                self.data_panel_slider_2 = wx.StaticText(self.panel_output_2, label='3', pos=(22, 2))
+                self.data_panel_slider_2 = wx.StaticText(self.panel_output_2, label='3', pos=(4, 2))
                 self.data_panel_slider_2.SetFont(self.font_big)
             self.data_panel_header.SetFont(self.font_header)
 
@@ -226,7 +222,7 @@ class Main(wx.Frame):
 
         # Some variables needed
         self.value_slider_1 = self.slider_1.GetValue()
-        self.value_slider_2 = self.slider_2.GetValue()
+        self.value_slider_2 = self.slider_2.GetValue()/10
         self.begin = True
         self.interpolation()
 
@@ -246,30 +242,60 @@ class Main(wx.Frame):
         """
         dummy = []
         dummy1 = []
+        dummy2 = []
+        dummy3 = []
         self.rolling_resistance = []
         index_diameter = []
+        index_depth = []
 
         for i in range(len(self.diameter)):
             for j in range(len(self.depth)):
                 if abs(self.diameter[i] - self.value_slider_1) <= 9 and abs(self.depth[j] - self.value_slider_2) < 1:
                     index_diameter.append(i)
+                    index_depth.append(j)
                     dummy1.append(self.traction[i][j])
                     dummy.append(self.resistance[i][j])
                     self.normal_force = self.force[j]
 
+                    if self.diameter[i] == self.value_slider_1:
+                        one_diameter = True
+                        one_depth = False
+                    elif self.depth[j] == self.value_slider_2:
+                        one_depth = True
+                        one_diameter = False
+                    else:
+                        one_depth = False
+                        one_diameter = False
+
         if len(dummy) == 1:
             self.rolling_resistance = dummy[0]
-
         elif len(dummy) == 2:
             for k in range(len(dummy[0])):
-                self.rolling_resistance.append(dummy[0][k] + (dummy[0][k] - dummy[1][k])/
-                                               (self.diameter[index_diameter[0]] - self.diameter[index_diameter[1]]) *
-                                               abs(self.diameter[index_diameter[0]] - self.value_slider_1))
+                if one_depth:
+                    self.rolling_resistance.append(dummy[0][k] + (dummy[0][k] - dummy[1][k]) /
+                                                   (self.diameter[index_diameter[0]]-self.diameter[index_diameter[1]]) *
+                                                   abs(self.diameter[index_diameter[0]]-self.value_slider_1))
+                elif one_diameter:
+                    self.rolling_resistance.append(dummy[0][k] + (dummy[0][k] - dummy[1][k]) /
+                                                   (self.depth[index_depth[0]] - self.depth[index_depth[1]]) *
+                                                   abs(self.depth[index_depth[0]] - self.value_slider_2))
+        elif len(dummy) == 4:
+            for k in range(len(dummy[0])):
+                dummy2.append(dummy[0][k] + (dummy[0][k] - dummy[1][k]) / (self.depth[index_depth[0]]-self.depth[index_depth[1]]) * abs(self.depth[index_depth[0]]-self.value_slider_2))
+                dummy3.append(dummy[2][k] + (dummy[2][k] - dummy[3][k]) / (self.depth[index_depth[0]]-self.depth[index_depth[1]]) * abs(self.depth[index_depth[0]]-self.value_slider_2))
+                self.rolling_resistance.append(dummy2[k] + (dummy2[k] - dummy3[k]) / (self.diameter[index_diameter[0]]-self.diameter[index_diameter[2]]) * abs(self.diameter[index_diameter[0]]-self.value_slider_1))
+
         if len(dummy1) == 1:
             self.friction = dummy1[0]
-
         elif len(dummy1) == 2:
-            self.friction = dummy1[0] + (dummy1[0] - dummy1[1])/ (self.diameter[index_diameter[0]] - self.diameter[index_diameter[1]]) * abs(self.diameter[index_diameter[0]] - self.value_slider_1)
+            if one_depth:
+                self.friction = dummy1[0] + (dummy1[0] - dummy1[1])/ (self.diameter[index_diameter[0]] - self.diameter[index_diameter[1]]) * abs(self.diameter[index_diameter[0]] - self.value_slider_1)
+            elif one_diameter:
+                self.friction = dummy1[0] + (dummy1[0] - dummy1[1])/ (self.depth[index_depth[0]] - self.depth[index_depth[1]]) * abs(self.depth[index_depth[0]] - self.value_slider_2)
+        elif len(dummy1) == 4:
+            dummy4 = dummy1[0] + (dummy1[0] - dummy1[1])/ (self.depth[index_depth[0]] - self.depth[index_depth[1]]) * abs(self.depth[index_depth[0]] - self.value_slider_2)
+            dummy5 = dummy1[2] + (dummy1[2] - dummy1[3])/ (self.depth[index_depth[0]] - self.depth[index_depth[1]]) * abs(self.depth[index_depth[0]] - self.value_slider_2)
+            self.friction = dummy4 + (dummy4 - dummy5) / (self.diameter[index_diameter[0]]-self.diameter[index_diameter[2]]) * abs(self.diameter[index_diameter[0]]-self.value_slider_1)
 
         self.data_panel_resistance.SetLabel(str(round(max(self.rolling_resistance), 1)))
         self.data_panel_friction.SetLabel(str(round(self.friction, 1)))
@@ -302,7 +328,7 @@ class Main(wx.Frame):
         self.interpolation()
 
     def on_slider_2(self, e):
-        self.value_slider_2 = self.slider_2.GetValue()
+        self.value_slider_2 = self.slider_2.GetValue()/10
         self.data_panel_slider_2.SetLabel(str(self.value_slider_2))
         self.interpolation()
 
