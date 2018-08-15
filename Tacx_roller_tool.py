@@ -239,15 +239,6 @@ class Main(wx.Frame):
         # Figure cosmetics
         self.figure.set_xlabel("Velocity [km/h]")
         self.figure.set_ylabel("Rolling resistance [N]")
-        # self.figure = Figure()
-        # self.plot = self.figure.add_subplot(111)
-        # self.canvas = FigureCanvas(self.figure_panel, -1, self.figure)
-        # self.sizer = wx.BoxSizer(wx.HORIZONTAL)
-        # self.sizer.Add(self.canvas, 1, wx.LEFT | wx.TOP | wx.GROW)
-        # self.SetSizer(self.sizer)
-        # self.Fit()
-
-
 
     def interpolation(self):
         """
