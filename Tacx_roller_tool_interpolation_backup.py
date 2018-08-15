@@ -1,5 +1,6 @@
 import wx as wx
 import sys
+import matplotlib
 import wxmplot
 from numpy import array
 
@@ -19,7 +20,7 @@ class Main(wx.Frame):
 
         # Create the main frame
         wx.Frame.__init__(self, parent, title=title,
-                          style=wx.DEFAULT_FRAME_STYLE & ~(wx.RESIZE_BORDER | wx.MAXIMIZE_BOX), size=(900, 450))
+                          style=wx.DEFAULT_FRAME_STYLE & ~(wx.RESIZE_BORDER | wx.MAXIMIZE_BOX), size=(1030, 600))
         self.top_panel = wx.Panel(self)
         self.SetBackgroundColour("white")
 
@@ -35,8 +36,8 @@ class Main(wx.Frame):
         self.SetMenuBar(menu_bar)
 
         # Creating buttons to reset or Exit the application
-        self.exit_button = wx.Button(self.top_panel, -1, label='Exit', pos=(350, 320), size=(100, 30))
-        self.reset_button = wx.Button(self.top_panel, -1, label='Reset', pos=(350, 288), size=(100, 30))
+        self.exit_button = wx.Button(self.top_panel, -1, label='Exit', pos=(350, 390), size=(100, 30))
+        self.reset_button = wx.Button(self.top_panel, -1, label='Reset', pos=(350, 355), size=(100, 30))
 
         # Loading image for the Tacx logo, placement of this photo will also be done right here.
         try:
@@ -48,7 +49,7 @@ class Main(wx.Frame):
         image_file_png = wx.Image(image_path, wx.BITMAP_TYPE_PNG)
         image_file_png.Rescale(image_file_png.GetWidth() * 0.15, image_file_png.GetHeight() * 0.15)
         image_file_png = wx.Bitmap(image_file_png)
-        self.image = wx.StaticBitmap(self.top_panel, -1, image_file_png, pos=(340, 210),
+        self.image = wx.StaticBitmap(self.top_panel, -1, image_file_png, pos=(335, 167),
                                      size=(image_file_png.GetWidth(), image_file_png.GetHeight()))
 
         # Creating panels: Every panel and text, which is shown in the application, is created in this piece of code.
@@ -57,7 +58,7 @@ class Main(wx.Frame):
         self.font_header_1 = wx.Font(10, family=wx.FONTFAMILY_DECORATIVE, style=wx.FONTSTYLE_NORMAL, weight=wx.FONTWEIGHT_BOLD)
         self.font_normal = wx.Font(10, family=wx.FONTFAMILY_DECORATIVE, style=wx.FONTSTYLE_NORMAL, weight=wx.FONTWEIGHT_NORMAL)
         self.font_big = wx.Font(12, family=wx.FONTFAMILY_DECORATIVE, style=wx.FONTSTYLE_NORMAL, weight=wx.FONTWEIGHT_NORMAL)
-        self.statistics_titles = ["Roller diameter", "Sinking depth roller"]
+        self.statistics_titles = ["Roller diameter", "Contact force between roller and wheel"]
 
         for i in range(len(self.statistics_titles)):
             self.data_panel = wx.Panel(self.top_panel, -1, size=(465, 100), pos=(10, 10 + (1.2*i) * 60))
@@ -71,43 +72,31 @@ class Main(wx.Frame):
                 self.data_panel_slider_1 = wx.StaticText(self.panel_output_1, label='30', pos=(14, 2))
                 self.data_panel_slider_1.SetFont(self.font_big)
             if i == 1:
-                self.slider_2 = wx.Slider(self.data_panel, -1, 400, 200, 800, pos=(0, 25), size=(300, -1), style=wx.SL_HORIZONTAL | wx.SL_AUTOTICKS)
-                self.panel_output_2 = wx.Panel(self.data_panel, -1, style=wx.BORDER_SUNKEN, size=(40, 27), pos=(350, 20))
-                self.text_1 = wx.StaticText(self.data_panel, label='N', pos=(395, 23))
-
                 # TODO: AANPASSEN ALS WE DE ECHTE INDRUKKING WETEN
                 self.slider_2 = wx.Slider(self.data_panel, -1, 3, 1, 7, pos=(0, 25), size=(300, -1), style=wx.SL_HORIZONTAL | wx.SL_AUTOTICKS)
                 self.slider_2.SetTickFreq(1)
                 self.panel_output_2 = wx.Panel(self.data_panel, -1, style=wx.BORDER_SUNKEN, size=(40, 27), pos=(350, 20))
                 self.text_1 = wx.StaticText(self.data_panel, label='mm', pos=(395, 23))
                 self.text_1.SetFont(self.font_big)
-                self.data_panel_slider_2 = wx.StaticText(self.panel_output_2, label='3', pos=(22, 2))
+                self.data_panel_slider_2 = wx.StaticText(self.panel_output_2, label='3', pos=(4, 2))
                 self.data_panel_slider_2.SetFont(self.font_big)
             self.data_panel_header.SetFont(self.font_header)
 
-        self.output_panel = wx.Panel(self.top_panel, -1, style=wx.BORDER_RAISED, size=(305, 160), pos=(10, 190))
-        self.text = wx.StaticText(self.output_panel, label='friction force: \n(bigger = better)', pos=(14, 12))
+        self.output_panel = wx.Panel(self.top_panel, -1, style=wx.BORDER_RAISED, size=(305, 110), pos=(10, 150))
+        self.text = wx.StaticText(self.output_panel, label='Calculated friction force: \n(bigger = better)', pos=(14, 12))
         self.text.SetFont(self.font_header_1)
-        self.text = wx.StaticText(self.output_panel, label='Max rolling resistance: \n(smaller = better)', pos=(14, 108))
+        self.text = wx.StaticText(self.output_panel, label='Calculated rolling resistance: \n(smaller = better)', pos=(14, 60))
         self.text.SetFont(self.font_header_1)
-        self.text = wx.StaticText(self.output_panel, label='Normal force: \n(bigger = better)', pos=(14, 60))
-        self.text.SetFont(self.font_header_1)
-        self.panel_output_3 = wx.Panel(self.output_panel, -1, style=wx.BORDER_SUNKEN, size=(45, 27), pos=(230, 17))
-        self.data_output_text = wx.StaticText(self.output_panel, label='N', pos=(280, 21))
+        self.panel_output_3 = wx.Panel(self.output_panel, -1, style=wx.BORDER_SUNKEN, size=(40, 27), pos=(230, 17))
+        self.data_output_text = wx.StaticText(self.output_panel, label='N', pos=(275, 21))
         self.data_output_text.SetFont(self.font_big)
-        self.data_panel_friction= wx.StaticText(self.panel_output_3, label='30', pos=(4, 2))
+        self.data_panel_friction= wx.StaticText(self.panel_output_3, label='30', pos=(14, 2))
         self.data_panel_friction.SetFont(self.font_big)
 
-        self.panel_output_4 = wx.Panel(self.output_panel, -1, style=wx.BORDER_SUNKEN, size=(45, 27), pos=(230, 65))
-        self.data_output_text = wx.StaticText(self.output_panel, label='N', pos=(280, 69))
+        self.panel_output_4 = wx.Panel(self.output_panel, -1, style=wx.BORDER_SUNKEN, size=(40, 27), pos=(230, 65))
+        self.data_output_text = wx.StaticText(self.output_panel, label='N', pos=(275, 69))
         self.data_output_text.SetFont(self.font_big)
-        self.data_panel_normal_force = wx.StaticText(self.panel_output_4, label='300', pos=(4, 2))
-        self.data_panel_normal_force.SetFont(self.font_big)
-
-        self.panel_output_5 = wx.Panel(self.output_panel, -1, style=wx.BORDER_SUNKEN, size=(45, 27), pos=(230, 113))
-        self.data_output_text = wx.StaticText(self.output_panel, label='N', pos=(280, 117))
-        self.data_output_text.SetFont(self.font_big)
-        self.data_panel_resistance = wx.StaticText(self.panel_output_5, label='30', pos=(4, 2))
+        self.data_panel_resistance= wx.StaticText(self.panel_output_4, label='30', pos=(14, 2))
         self.data_panel_resistance.SetFont(self.font_big)
 
         # Set start-up message
@@ -212,9 +201,6 @@ class Main(wx.Frame):
                                     self.resistance_dia_70mmm_dept_5, self.resistance_dia_70mmm_dept_6,
                                     self.resistance_dia_70mmm_dept_7]
 
-        self.resistance = [self.resistance_dia_20mm, self.resistance_dia_30mm, self.resistance_dia_40mm,
-                           self.resistance_dia_50mm, self.resistance_dia_60mm, self.resistance_dia_70mm]
-
         self.force = [200, 300, 400, 500, 600, 700, 800]
 
         # Set events
@@ -227,21 +213,15 @@ class Main(wx.Frame):
         self.reset_button.Bind(wx.EVT_BUTTON, self.on_reset)
         self.reset_button.Bind(wx.EVT_ENTER_WINDOW, self.on_reset_widget_enter)
 
-        # Some variables needed
-        self.value_slider_1 = self.slider_1.GetValue()
-        self.value_slider_2 = self.slider_2.GetValue()
-        self.begin = True
-        self.interpolation()
-
         # Create initial plot
-        self.figure_panel = wx.Panel(self.top_panel, -1, size=(400, 400), pos=(480, -20))
+        self.figure_panel = wx.Panel(self.top_panel, -1, size=(540, 540), pos=(480, 10))
         self.figure_panel.SetBackgroundColour((255, 255, 255))
-        self.figure = wxmplot.PlotPanel(self.figure_panel, size=(400, 400), dpi=100, fontsize=2, axisbg='#FFFFFF')
-        self.figure.oplot(array(self.speed), array(self.rolling_resistance), framecolor='white')
+        self.figure = wxmplot.PlotPanel(self.figure_panel, size=(540, 540), dpi=100, fontsize=2, axisbg='#FFFFFF')
+        # self.figure.oplot(array(self.testdata[0]), array(self.testdata[1]))
 
         # Figure cosmetics
         self.figure.set_xlabel("Velocity [km/h]")
-        self.figure.set_ylabel("Rolling resistance [N]")
+        self.figure.set_ylabel("Value")
         # self.figure = Figure()
         # self.plot = self.figure.add_subplot(111)
         # self.canvas = FigureCanvas(self.figure_panel, -1, self.figure)
@@ -250,48 +230,60 @@ class Main(wx.Frame):
         # self.SetSizer(self.sizer)
         # self.Fit()
 
-
+        # Some variables needed
+        self.value_slider_1 = self.slider_1.GetValue()
+        self.value_slider_2 = self.slider_2.GetValue()
+        self.interpolation()
 
     def interpolation(self):
         """
         Interpolation to make a graph of the output values.
         """
-        dummy = []
-        dummy1 = []
-        self.rolling_resistance = []
-        index_diameter = []
-
-        for i in range(len(self.diameter)):
-            for j in range(len(self.depth)):
-                if abs(self.diameter[i] - self.value_slider_1) <= 9 and abs(self.depth[j] - self.value_slider_2) < 1:
-                    index_diameter.append(i)
-                    dummy1.append(self.traction[i][j])
-                    dummy.append(self.resistance[i][j])
-                    self.normal_force = self.force[j]
-
-        if len(dummy) == 1:
-            self.rolling_resistance = dummy[0]
-
-        elif len(dummy) == 2:
-            for k in range(len(dummy[0])):
-                self.rolling_resistance.append(dummy[0][k] + (dummy[0][k] - dummy[1][k])/
-                                               (self.diameter[index_diameter[0]] - self.diameter[index_diameter[1]]) *
-                                               abs(self.diameter[index_diameter[0]] - self.value_slider_1))
-        if len(dummy1) == 1:
-            self.friction = dummy1[0]
-
-        elif len(dummy1) == 2:
-            self.friction = dummy1[0] + (dummy1[0] - dummy1[1])/ (self.diameter[index_diameter[0]] - self.diameter[index_diameter[1]]) * abs(self.diameter[index_diameter[0]] - self.value_slider_1)
-
-        self.data_panel_resistance.SetLabel(str(round(max(self.rolling_resistance), 1)))
-        self.data_panel_friction.SetLabel(str(round(self.friction, 1)))
-        self.data_panel_normal_force.SetLabel(str(round(self.normal_force, 1)))
-
-        # Updating the plot
-        if self.begin == False:
-            self.figure.update_line(1, array(self.speed), array(self.rolling_resistance), draw=True)
-
-        self.begin = False
+        # dummy = []
+        # for i in range(len(self.testdata)):
+        #     if abs(self.testdata[i][0] - self.value_slider_1) <= 9 and abs(self.testdata[i][1] - self.value_slider_2) <= 99:
+        #         dummy.append(self.testdata[i])
+        #
+        # if len(dummy) == 1:
+        #     self.friction = dummy[0][2]
+        #     self.rolling_resistance = dummy[0][3]
+        # elif len(dummy) == 2:
+        #     if dummy[0][0] == dummy[1][0]:
+        #         # The diameter is the same
+        #         self.friction = dummy[0][2] + (dummy[0][2] - dummy[1][2])/(dummy[0][1] - dummy[1][1]) * abs(dummy[0][1] - self.value_slider_2)
+        #         self.rolling_resistance = dummy[0][3] + (dummy[0][3] - dummy[1][3])/(dummy[0][1] - dummy[1][1]) * abs(dummy[0][1] - self.value_slider_2)
+        #
+        #     elif dummy[0][1] == dummy[1][1]:
+        #         # The contact force is the same
+        #         self.friction = dummy[0][2] + (dummy[0][2] - dummy[1][2])/(dummy[0][0] - dummy[1][0]) * abs(dummy[0][0] - self.value_slider_1)
+        #         self.rolling_resistance = dummy[0][3] + (dummy[0][3] - dummy[1][3])/(dummy[0][0] - dummy[1][0]) * abs(dummy[0][0] - self.value_slider_1)
+        # elif len(dummy)  == 4:
+        #     data_1 = dummy[0]
+        #     data_2 = dummy[1]
+        #     data_3 = dummy[2]
+        #     data_4 = dummy[3]
+        #     data_interpolated_force_1 = []
+        #     data_interpolated_force_2 = []
+        #
+        #     data_interpolated_force_1.append(data_1[0])
+        #     data_interpolated_force_1.append(self.value_slider_2)
+        #     data_interpolated_force_1.append(data_1[2] + (data_1[2] - data_2[2])/(data_1[1] - data_2[1]) * abs(data_1[1] - self.value_slider_2))
+        #     data_interpolated_force_1.append(data_1[3] + (data_1[3] - data_2[3])/(data_1[1] - data_2[1]) * abs(data_1[1] - self.value_slider_2))
+        #
+        #     data_interpolated_force_2.append(data_3[0])
+        #     data_interpolated_force_2.append(self.value_slider_2)
+        #     data_interpolated_force_2.append(data_3[2] + (data_3[2] - data_4[2])/(data_3[1] - data_4[1]) * abs(data_3[1] - self.value_slider_2))
+        #     data_interpolated_force_2.append(data_3[3] + (data_3[3] - data_4[3])/(data_3[1] - data_4[1]) * abs(data_3[1] - self.value_slider_2))
+        #
+        #     self.friction = data_interpolated_force_1[2] + (data_interpolated_force_1[2] - data_interpolated_force_2[2])/(data_interpolated_force_1[0] - data_interpolated_force_2[0]) * abs(data_interpolated_force_1[0] - self.value_slider_1)
+        #     self.rolling_resistance = data_interpolated_force_1[3] + (data_interpolated_force_1[3] - data_interpolated_force_2[3])/(data_interpolated_force_1[0] - data_interpolated_force_2[0]) * abs(data_interpolated_force_1[0] - self.value_slider_1)
+        #
+        # self.data_panel_resistance.SetLabel(str(int(self.rolling_resistance)))
+        # self.data_panel_friction.SetLabel(str(int(self.friction)))
+        #
+        # # Updating the plot
+        # #TODO: Redrawen werkt, nu nog met de goeie data vermenigvuldigen enzo
+        # self.figure.update_line(1, self.value_slider_2 * array(self.testdata[0]), self.value_slider_1 * array(self.testdata[1]), draw=True)
 
 
     def on_about(self, e):
@@ -356,6 +348,6 @@ class Main(wx.Frame):
 
 if __name__ == '__main__':
     Application = wx.App(False)
-    frame = Main(None, 'Tacx design tool                                                                         '
-                       '                                                                     [v1.0]').Show()
+    frame = Main(None, 'Tacx design tool                           '
+                       '             [v1.0]').Show()
     Application.MainLoop()

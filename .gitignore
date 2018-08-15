@@ -1,4 +1,5 @@
 
+<<<<<<< HEAD
 .idea/inspectionProfiles/Project_Default.xml
 .idea/misc.xml
 .idea/modules.xml
@@ -8,3 +9,7 @@
 .idea/workspace.xml
 .idea/vcs.xml
 .idea/inspectionProfiles/Project_Default.xml
+=======
+*.xml
+.idea/Tacx_slip_grip_rol.iml
+>>>>>>> ec04c8883380432b9b4aa25e146b429d64141a9e
