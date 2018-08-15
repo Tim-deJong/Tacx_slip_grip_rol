@@ -198,7 +198,7 @@ class Main(wx.Frame):
 
         # Updating the plot
         #TODO: Redrawen werkt, nu nog met de goeie data vermenigvuldigen enzo
-        self.figure.update_line(1, array(self.testdata[0]), self.value_slider_1 * array(self.testdata[1]), draw=True)
+        self.figure.update_line(1, self.value_slider_2 * array(self.testdata[0]), self.value_slider_1 * array(self.testdata[1]), draw=True)
 
 
     def on_about(self, e):
