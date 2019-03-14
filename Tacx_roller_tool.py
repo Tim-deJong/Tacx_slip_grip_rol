@@ -60,7 +60,7 @@ class Main(wx.Frame):
             self.data_panel = wx.Panel(self.top_panel, -1, size=(465, 100), pos=(10, 10 + (1.2*i) * 60))
             self.data_panel_header = wx.StaticText(self.data_panel, label=self.statistics_titles[i], pos=(4, 2))
             if i == 0:
-                self.slider_1 = wx.Slider(self.data_panel, -1, 30, 20, 70, pos=(0, 25), size=(300, -1), style=wx.SL_HORIZONTAL | wx.SL_AUTOTICKS)
+                self.slider_1 = wx.Slider(self.data_panel, -1, 30, 30, 60, pos=(0, 25), size=(300, -1), style=wx.SL_HORIZONTAL | wx.SL_AUTOTICKS)
                 self.slider_1.SetTickFreq(10)
                 self.panel_output_1 = wx.Panel(self.data_panel, -1, style=wx.BORDER_SUNKEN, size=(40, 27), pos=(350, 20))
                 self.text_1 = wx.StaticText(self.data_panel, label='mm', pos=(395, 23))
@@ -118,106 +118,103 @@ class Main(wx.Frame):
         # Create parameter which contains all the tested data. These are the parameters which are fixed and will be
         # used to test the traction and resistance.
         # TODO: ALLES AANPASSEN NAAR RESULTATEN EN DE GEBRUIKTE PARAMETERS ALS DEZE BESCHIKBAAR ZIJN
-        self.speed = [5, 10, 20, 30, 40, 50]
-        self.diameter = [20, 30, 40, 50, 60, 70]
+        self.speed = [5, 10, 15, 20, 25, 30, 35, 40, 45]
+        self.diameter = [30, 40, 50, 60]
         self.depth = [1, 2, 3, 4, 5, 6, 7]
 
         # Traction for each depth at each diameter
-        self.traction_dia_20mm = [4, 6, 8, 10, 12, 14, 16]
-        self.traction_dia_30mm = [5, 7, 9, 11, 13, 15, 17]
-        self.traction_dia_40mm = [6, 8, 10, 12, 14, 16, 18]
-        self.traction_dia_50mm = [7, 9, 11, 13, 15, 17, 19]
-        self.traction_dia_60mm = [8, 10, 12, 14, 16, 18, 20]
-        self.traction_dia_70mm = [9, 11, 13, 15, 17, 19, 21]
-        self.traction = [self.traction_dia_20mm, self.traction_dia_30mm, self.traction_dia_40mm, self.traction_dia_50mm,
-                         self.traction_dia_60mm, self.traction_dia_70mm]
+        # self.traction_dia_20mm = [4, 6, 8, 10, 12, 14, 16]
+        self.traction_dia_30mm = [11.266, 43.93333333, 84.46666667, 119.2666667, 163.3333333, 216.96, 275.3]
+        self.traction_dia_40mm = [21.93333333, 57.466666678, 91.8666666710, 143.733333312, 192.133333314, 248, 293.3333333]
+        self.traction_dia_50mm = [22.533333337, 68.733333339, 111.266666711, 152.333333313, 212.466666715, 274.266666717, 312.066666719]
+        self.traction_dia_60mm = [26.666666678, 56, 112.6, 164.133333314, 226.4, 273.466666718, 332.6]
+        # self.traction_dia_70mm = [9, 11, 13, 15, 17, 19, 21]
+        self.traction = [self.traction_dia_30mm, self.traction_dia_40mm, self.traction_dia_50mm, self.traction_dia_60mm]
 
         # Normal force for each depth at each diameter
-        self.force_dia_20mm = [4, 6, 8, 10, 12, 14, 16]
-        self.force_dia_30mm = [5, 7, 9, 11, 13, 15, 17]
-        self.force_dia_40mm = [6, 8, 10, 12, 14, 16, 18]
-        self.force_dia_50mm = [7, 9, 11, 13, 15, 17, 19]
-        self.force_dia_60mm = [8, 10, 12, 14, 16, 18, 20]
-        self.force_dia_60mm = [8, 10, 12, 14, 16, 18, 20]
-        self.force_dia_70mm = [9, 11, 13, 15, 17, 19, 21]
-        self.force = [self.force_dia_20mm, self.force_dia_30mm, self.force_dia_40mm, self.force_dia_50mm,
-                         self.force_dia_60mm, self.force_dia_70mm]
+        # self.force_dia_20mm = [4, 6, 8, 10, 12, 14, 16]
+        self.force_dia_30mm = [11.880714745, 38.502201327, 70.126567419, 101.879505811, 133.06257313, 188.5, 237.9]
+        self.force_dia_40mm = [11.716096146, 33.184797088, 55.3109619510, 91.6324982212, 125.989932614, 164.711920716, 193.505733318]
+        self.force_dia_50mm = [11.59149137, 32.316324859, 53.4091589811, 78.0951891713, 107.046263215, 136.794991817, 171.297600219]
+        self.force_dia_60mm = [8.7912101718, 18.7199386510, 40.89978712, 60.8439429914, 83.9226259816, 105.030285818, 131.489354320]
+        # self.force_dia_70mm = [9, 11, 13, 15, 17, 19, 21]
+        self.force = [self.force_dia_30mm, self.force_dia_40mm, self.force_dia_50mm, self.force_dia_60mm]
 
         # Resistance for each speed at a certain depth and diameter
-        self.resistance_dia_20mm_dept_1 = [0, 1, 1, 2, 3, 4]
-        self.resistance_dia_20mm_dept_2 = [0, 1, 2, 3, 4, 5]
-        self.resistance_dia_20mm_dept_3 = [0, 2, 3, 4, 5, 6]
-        self.resistance_dia_20mm_dept_4 = [0, 3, 4, 5, 6, 7]
-        self.resistance_dia_20mm_dept_5 = [0, 4, 5, 6, 7, 8]
-        self.resistance_dia_20mm_dept_6 = [0, 5, 6, 7, 8, 9]
-        self.resistance_dia_20mm_dept_7 = [0, 6, 7, 8, 9, 10]
-        self.resistance_dia_20mm = [self.resistance_dia_20mm_dept_1, self.resistance_dia_20mm_dept_2,
-                                    self.resistance_dia_20mm_dept_3, self.resistance_dia_20mm_dept_4,
-                                    self.resistance_dia_20mm_dept_5, self.resistance_dia_20mm_dept_6,
-                                    self.resistance_dia_20mm_dept_7]
+        # self.resistance_dia_20mm_dept_1 = [0, 1, 1, 2, 3, 4]
+        # self.resistance_dia_20mm_dept_2 = [0, 1, 2, 3, 4, 5]
+        # self.resistance_dia_20mm_dept_3 = [0, 2, 3, 4, 5, 6]
+        # self.resistance_dia_20mm_dept_4 = [0, 3, 4, 5, 6, 7]
+        # self.resistance_dia_20mm_dept_5 = [0, 4, 5, 6, 7, 8]
+        # self.resistance_dia_20mm_dept_6 = [0, 5, 6, 7, 8, 9]
+        # self.resistance_dia_20mm_dept_7 = [0, 6, 7, 8, 9, 10]
+        # self.resistance_dia_20mm = [self.resistance_dia_20mm_dept_1, self.resistance_dia_20mm_dept_2,
+        #                             self.resistance_dia_20mm_dept_3, self.resistance_dia_20mm_dept_4,
+        #                             self.resistance_dia_20mm_dept_5, self.resistance_dia_20mm_dept_6,
+        #                             self.resistance_dia_20mm_dept_7]
 
-        self.resistance_dia_30mm_dept_1 = [0, 1, 2, 3, 4, 5]
-        self.resistance_dia_30mm_dept_2 = [0, 2, 3, 4, 5, 6]
-        self.resistance_dia_30mm_dept_3 = [0, 3, 4, 5, 6, 7]
-        self.resistance_dia_30mm_dept_4 = [0, 4, 5, 6, 7, 8]
-        self.resistance_dia_30mm_dept_5 = [0, 5, 6, 7, 8, 9]
-        self.resistance_dia_30mm_dept_6 = [0, 6, 7, 8, 9, 10]
-        self.resistance_dia_30mm_dept_7 = [0, 7, 8, 9, 10, 11]
+        self.resistance_dia_30mm_dept_1 = self.resistance_at_diameter(0.86, 0.276)
+        self.resistance_dia_30mm_dept_2 = self.resistance_at_diameter(1.29, 0.328)
+        self.resistance_dia_30mm_dept_3 = self.resistance_at_diameter(2.47, 0.224)
+        self.resistance_dia_30mm_dept_4 = self.resistance_at_diameter(3.39, 0.238)
+        self.resistance_dia_30mm_dept_5 = self.resistance_at_diameter(5.09, 0.191)
+        self.resistance_dia_30mm_dept_6 = self.resistance_at_diameter(5.46, 0.196)
+        self.resistance_dia_30mm_dept_7 = self.resistance_at_diameter(8.1, 0.145)
         self.resistance_dia_30mm = [self.resistance_dia_30mm_dept_1, self.resistance_dia_30mm_dept_2,
                                     self.resistance_dia_30mm_dept_3, self.resistance_dia_30mm_dept_4,
                                     self.resistance_dia_30mm_dept_5, self.resistance_dia_30mm_dept_6,
                                     self.resistance_dia_30mm_dept_7]
 
-        self.resistance_dia_40mm_dept_1 = [0, 2, 3, 4, 5, 6]
-        self.resistance_dia_40mm_dept_2 = [0, 3, 4, 5, 6, 7]
-        self.resistance_dia_40mm_dept_3 = [0, 4, 5, 6, 7, 8]
-        self.resistance_dia_40mm_dept_4 = [0, 5, 6, 7, 8, 9]
-        self.resistance_dia_40mm_dept_5 = [0, 6, 7, 8, 9, 10]
-        self.resistance_dia_40mm_dept_6 = [0, 7, 8, 9, 10, 11]
-        self.resistance_dia_40mm_dept_7 = [0, 8, 9, 10, 11, 12]
+        self.resistance_dia_40mm_dept_1 = self.resistance_at_diameter(0.374, 0.425)
+        self.resistance_dia_40mm_dept_2 = self.resistance_at_diameter(1.31, 0.247)
+        self.resistance_dia_40mm_dept_3 = self.resistance_at_diameter(2.29, 0.238)
+        self.resistance_dia_40mm_dept_4 = self.resistance_at_diameter(3.05, 0.238)
+        self.resistance_dia_40mm_dept_5 = self.resistance_at_diameter(6.08, 0.13)
+        self.resistance_dia_40mm_dept_6 = self.resistance_at_diameter(5.46, 0.196)
+        self.resistance_dia_40mm_dept_7 = self.resistance_at_diameter(8.1, 0.145)
         self.resistance_dia_40mm = [self.resistance_dia_40mm_dept_1, self.resistance_dia_40mm_dept_2,
                                     self.resistance_dia_40mm_dept_3, self.resistance_dia_40mm_dept_4,
                                     self.resistance_dia_40mm_dept_5, self.resistance_dia_40mm_dept_6,
                                     self.resistance_dia_40mm_dept_7]
 
-        self.resistance_dia_50mmm_dept_1 = [0, 3, 4, 5, 6, 7]
-        self.resistance_dia_50mmm_dept_2 = [0, 4, 5, 6, 7, 8]
-        self.resistance_dia_50mmm_dept_3 = [0, 5, 6, 7, 8, 9]
-        self.resistance_dia_50mmm_dept_4 = [0, 6, 7, 8, 9, 10]
-        self.resistance_dia_50mmm_dept_5 = [0, 7, 8, 9, 10, 11]
-        self.resistance_dia_50mmm_dept_6 = [0, 8, 9, 10, 11, 12]
-        self.resistance_dia_50mmm_dept_7 = [0, 9, 10, 11, 12, 13]
+        self.resistance_dia_50mmm_dept_1 = self.resistance_at_diameter(0.894/2, 0.246)
+        self.resistance_dia_50mmm_dept_2 = self.resistance_at_diameter(0.894, 0.246)
+        self.resistance_dia_50mmm_dept_3 = self.resistance_at_diameter(1.36, 0.278)
+        self.resistance_dia_50mmm_dept_4 = self.resistance_at_diameter(2.27, 0.232)
+        self.resistance_dia_50mmm_dept_5 = self.resistance_at_diameter(3.47, 0.203)
+        self.resistance_dia_50mmm_dept_6 = self.resistance_at_diameter(4.7, 0.184)
+        self.resistance_dia_50mmm_dept_7 = self.resistance_at_diameter(5.99, 0.172)
         self.resistance_dia_50mm = [self.resistance_dia_50mmm_dept_1, self.resistance_dia_50mmm_dept_2,
                                     self.resistance_dia_50mmm_dept_3, self.resistance_dia_50mmm_dept_4,
                                     self.resistance_dia_50mmm_dept_5, self.resistance_dia_50mmm_dept_6,
                                     self.resistance_dia_50mmm_dept_7]
 
-        self.resistance_dia_60mmm_dept_1 = [0, 4, 5, 6, 7, 8]
-        self.resistance_dia_60mmm_dept_2 = [0, 5, 6, 7, 8, 9]
-        self.resistance_dia_60mmm_dept_3 = [0, 6, 7, 8, 9, 10]
-        self.resistance_dia_60mmm_dept_4 = [0, 7, 8, 9, 10, 11]
-        self.resistance_dia_60mmm_dept_5 = [0, 8, 9, 10, 11, 12]
-        self.resistance_dia_60mmm_dept_6 = [0, 9, 10, 11, 12, 13]
-        self.resistance_dia_60mmm_dept_7 = [0, 10, 11, 12, 13, 14]
+        self.resistance_dia_60mmm_dept_1 = self.resistance_at_diameter(0.129, 0.538)
+        self.resistance_dia_60mmm_dept_2 = self.resistance_at_diameter(0.364, 0.446)
+        self.resistance_dia_60mmm_dept_3 = self.resistance_at_diameter(1.35, 0.222)
+        self.resistance_dia_60mmm_dept_4 = self.resistance_at_diameter(1.92, 0.26)
+        self.resistance_dia_60mmm_dept_5 = self.resistance_at_diameter(3.03, 0.211)
+        self.resistance_dia_60mmm_dept_6 = self.resistance_at_diameter(4.4, 0.171)
+        self.resistance_dia_60mmm_dept_7 = self.resistance_at_diameter(5.57, 0.168)
         self.resistance_dia_60mm = [self.resistance_dia_60mmm_dept_1, self.resistance_dia_60mmm_dept_2,
                                     self.resistance_dia_60mmm_dept_3, self.resistance_dia_60mmm_dept_4,
                                     self.resistance_dia_60mmm_dept_5, self.resistance_dia_60mmm_dept_6,
                                     self.resistance_dia_60mmm_dept_7]
 
-        self.resistance_dia_70mmm_dept_1 = [0, 5, 6, 7, 8, 9]
-        self.resistance_dia_70mmm_dept_2 = [0, 6, 7, 8, 9, 10]
-        self.resistance_dia_70mmm_dept_3 = [0, 7, 8, 9, 10, 11]
-        self.resistance_dia_70mmm_dept_4 = [0, 8, 9, 10, 11, 12]
-        self.resistance_dia_70mmm_dept_5 = [0, 9, 10, 11, 12, 13]
-        self.resistance_dia_70mmm_dept_6 = [0, 10, 11, 12, 13, 14]
-        self.resistance_dia_70mmm_dept_7 = [0, 11, 12, 13, 14, 15]
-        self.resistance_dia_70mm = [self.resistance_dia_70mmm_dept_1, self.resistance_dia_70mmm_dept_2,
-                                    self.resistance_dia_70mmm_dept_3, self.resistance_dia_70mmm_dept_4,
-                                    self.resistance_dia_70mmm_dept_5, self.resistance_dia_70mmm_dept_6,
-                                    self.resistance_dia_70mmm_dept_7]
+        # self.resistance_dia_70mmm_dept_1 = [0, 5, 6, 7, 8, 9]
+        # self.resistance_dia_70mmm_dept_2 = [0, 6, 7, 8, 9, 10]
+        # self.resistance_dia_70mmm_dept_3 = [0, 7, 8, 9, 10, 11]
+        # self.resistance_dia_70mmm_dept_4 = [0, 8, 9, 10, 11, 12]
+        # self.resistance_dia_70mmm_dept_5 = [0, 9, 10, 11, 12, 13]
+        # self.resistance_dia_70mmm_dept_6 = [0, 10, 11, 12, 13, 14]
+        # self.resistance_dia_70mmm_dept_7 = [0, 11, 12, 13, 14, 15]
+        # self.resistance_dia_70mm = [self.resistance_dia_70mmm_dept_1, self.resistance_dia_70mmm_dept_2,
+        #                             self.resistance_dia_70mmm_dept_3, self.resistance_dia_70mmm_dept_4,
+        #                             self.resistance_dia_70mmm_dept_5, self.resistance_dia_70mmm_dept_6,
+        #                             self.resistance_dia_70mmm_dept_7]
 
-        self.resistance = [self.resistance_dia_20mm, self.resistance_dia_30mm, self.resistance_dia_40mm,
-                           self.resistance_dia_50mm, self.resistance_dia_60mm, self.resistance_dia_70mm]
+        self.resistance = [self.resistance_dia_30mm, self.resistance_dia_40mm,
+                           self.resistance_dia_50mm, self.resistance_dia_60mm]
 
         # Set events
         self.Bind(wx.EVT_MENU, self.on_about, menu_about)
@@ -317,10 +314,11 @@ class Main(wx.Frame):
         elif len(dummy10) == 4:
             dummy6 = dummy10[0] + (dummy10[0] - dummy10[1])/ (self.depth[index_depth[0]] - self.depth[index_depth[1]]) * abs(self.depth[index_depth[0]] - self.value_slider_2)
             dummy7 = dummy10[2] + (dummy10[2] - dummy10[3])/ (self.depth[index_depth[0]] - self.depth[index_depth[1]]) * abs(self.depth[index_depth[0]] - self.value_slider_2)
-            self.friction = dummy4 + (dummy4 - dummy5) / (self.diameter[index_diameter[0]]-self.diameter[index_diameter[2]]) * abs(self.diameter[index_diameter[0]]-self.value_slider_1)
+            self.normal_force = dummy6 + (dummy6 - dummy7) / (self.diameter[index_diameter[0]]-self.diameter[index_diameter[2]]) * abs(self.diameter[index_diameter[0]]-self.value_slider_1)
 
-        self.data_panel_resistance.SetLabel(str(round(max(self.rolling_resistance), 1)))
-        self.data_panel_friction.SetLabel(str(round(self.friction, 1)))
+
+        self.data_panel_resistance.SetLabel(str(round(max(self.rolling_resistance))))
+        self.data_panel_friction.SetLabel(str(round(self.friction)))
         self.data_panel_normal_force.SetLabel(str(round(self.normal_force, 1)))
 
         # Updating the plot
@@ -343,6 +341,12 @@ class Main(wx.Frame):
                                            "About Tacx design tool", wx.OK)
         prompted_dialog.ShowModal()
         prompted_dialog.Destroy()
+
+    def resistance_at_diameter(self,a,b):
+        resistance_dummy = []
+        for i in range(len(self.speed)):
+            resistance_dummy.append(a*self.speed[i]**b)
+        return resistance_dummy
 
     def on_slider_1(self, e):
         self.value_slider_1 = self.slider_1.GetValue()
