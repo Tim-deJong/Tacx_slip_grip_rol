@@ -83,7 +83,7 @@ class Main(wx.Frame):
         self.text.SetFont(self.font_header_1)
         self.text = wx.StaticText(self.output_panel, label='Max rolling resistance: \n(smaller = better)', pos=(14, 108))
         self.text.SetFont(self.font_header_1)
-        self.text = wx.StaticText(self.output_panel, label='Normal force: \n(bigger = better)', pos=(14, 60))
+        self.text = wx.StaticText(self.output_panel, label='Normal force: \n', pos=(14, 60))
         self.text.SetFont(self.font_header_1)
         self.panel_output_3 = wx.Panel(self.output_panel, -1, style=wx.BORDER_SUNKEN, size=(45, 27), pos=(230, 17))
         self.data_output_text = wx.StaticText(self.output_panel, label='N', pos=(280, 21))
@@ -131,6 +131,17 @@ class Main(wx.Frame):
         self.traction_dia_70mm = [9, 11, 13, 15, 17, 19, 21]
         self.traction = [self.traction_dia_20mm, self.traction_dia_30mm, self.traction_dia_40mm, self.traction_dia_50mm,
                          self.traction_dia_60mm, self.traction_dia_70mm]
+
+        # Normal force for each depth at each diameter
+        self.force_dia_20mm = [4, 6, 8, 10, 12, 14, 16]
+        self.force_dia_30mm = [5, 7, 9, 11, 13, 15, 17]
+        self.force_dia_40mm = [6, 8, 10, 12, 14, 16, 18]
+        self.force_dia_50mm = [7, 9, 11, 13, 15, 17, 19]
+        self.force_dia_60mm = [8, 10, 12, 14, 16, 18, 20]
+        self.force_dia_60mm = [8, 10, 12, 14, 16, 18, 20]
+        self.force_dia_70mm = [9, 11, 13, 15, 17, 19, 21]
+        self.force = [self.force_dia_20mm, self.force_dia_30mm, self.force_dia_40mm, self.force_dia_50mm,
+                         self.force_dia_60mm, self.force_dia_70mm]
 
         # Resistance for each speed at a certain depth and diameter
         self.resistance_dia_20mm_dept_1 = [0, 1, 1, 2, 3, 4]
@@ -208,8 +219,6 @@ class Main(wx.Frame):
         self.resistance = [self.resistance_dia_20mm, self.resistance_dia_30mm, self.resistance_dia_40mm,
                            self.resistance_dia_50mm, self.resistance_dia_60mm, self.resistance_dia_70mm]
 
-        self.force = [200, 300, 400, 500, 600, 700, 800]
-
         # Set events
         self.Bind(wx.EVT_MENU, self.on_about, menu_about)
         self.Bind(wx.EVT_MENU, self.on_exit, menu_exit)
@@ -244,6 +253,7 @@ class Main(wx.Frame):
         dummy1 = []
         dummy2 = []
         dummy3 = []
+        dummy10 = []
         self.rolling_resistance = []
         index_diameter = []
         index_depth = []
@@ -255,7 +265,7 @@ class Main(wx.Frame):
                     index_depth.append(j)
                     dummy1.append(self.traction[i][j])
                     dummy.append(self.resistance[i][j])
-                    self.normal_force = self.force[j]
+                    dummy10.append(self.force[i][j])
 
                     if self.diameter[i] == self.value_slider_1:
                         one_diameter = True
@@ -295,6 +305,18 @@ class Main(wx.Frame):
         elif len(dummy1) == 4:
             dummy4 = dummy1[0] + (dummy1[0] - dummy1[1])/ (self.depth[index_depth[0]] - self.depth[index_depth[1]]) * abs(self.depth[index_depth[0]] - self.value_slider_2)
             dummy5 = dummy1[2] + (dummy1[2] - dummy1[3])/ (self.depth[index_depth[0]] - self.depth[index_depth[1]]) * abs(self.depth[index_depth[0]] - self.value_slider_2)
+            self.friction = dummy4 + (dummy4 - dummy5) / (self.diameter[index_diameter[0]]-self.diameter[index_diameter[2]]) * abs(self.diameter[index_diameter[0]]-self.value_slider_1)
+
+        if len(dummy10) == 1:
+            self.normal_force = dummy10[0]
+        elif len(dummy10) == 2:
+            if one_depth:
+                self.normal_force = dummy10[0] + (dummy10[0] - dummy10[1])/ (self.diameter[index_diameter[0]] - self.diameter[index_diameter[1]]) * abs(self.diameter[index_diameter[0]] - self.value_slider_1)
+            elif one_diameter:
+                self.normal_force = dummy10[0] + (dummy10[0] - dummy10[1])/ (self.depth[index_depth[0]] - self.depth[index_depth[1]]) * abs(self.depth[index_depth[0]] - self.value_slider_2)
+        elif len(dummy10) == 4:
+            dummy6 = dummy10[0] + (dummy10[0] - dummy10[1])/ (self.depth[index_depth[0]] - self.depth[index_depth[1]]) * abs(self.depth[index_depth[0]] - self.value_slider_2)
+            dummy7 = dummy10[2] + (dummy10[2] - dummy10[3])/ (self.depth[index_depth[0]] - self.depth[index_depth[1]]) * abs(self.depth[index_depth[0]] - self.value_slider_2)
             self.friction = dummy4 + (dummy4 - dummy5) / (self.diameter[index_diameter[0]]-self.diameter[index_diameter[2]]) * abs(self.diameter[index_diameter[0]]-self.value_slider_1)
 
         self.data_panel_resistance.SetLabel(str(round(max(self.rolling_resistance), 1)))
