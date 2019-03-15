@@ -8,20 +8,21 @@ missing module named multiprocessing.get_start_method - imported by multiprocess
 missing module named multiprocessing.SimpleQueue - imported by multiprocessing, concurrent.futures.process
 missing module named 'win32com.gen_py' - imported by win32com, C:\Users\Jelle\AppData\Local\Programs\Python\Python36\lib\site-packages\PyInstaller\loader\rthooks\pyi_rth_win32comgenpy.py
 missing module named pyimod03_importers - imported by C:\Users\Jelle\AppData\Local\Programs\Python\Python36\lib\site-packages\PyInstaller\loader\rthooks\pyi_rth_pkgres.py
-missing module named 'com.sun' - imported by pkg_resources._vendor.appdirs
-missing module named com - imported by pkg_resources._vendor.appdirs
-missing module named 'pkg_resources.extern.pyparsing' - imported by pkg_resources._vendor.packaging.requirements, pkg_resources._vendor.packaging.markers
-missing module named StringIO - imported by six, numpy.lib.utils, numpy.testing._private.utils, scipy._lib.six, numpy.lib.format, pkg_resources._vendor.six
 missing module named __builtin__ - imported by numpy.core.numerictypes, numpy.core.numeric, numpy.distutils.misc_util, scipy._lib.six, numpy.lib.function_base, numpy.lib._iotools, numpy.ma.core, numpy, pyparsing, pkg_resources._vendor.pyparsing
 missing module named ordereddict - imported by pyparsing, pkg_resources._vendor.pyparsing
+missing module named 'pkg_resources.extern.pyparsing' - imported by pkg_resources._vendor.packaging.markers, pkg_resources._vendor.packaging.requirements
+missing module named 'com.sun' - imported by pkg_resources._vendor.appdirs
+missing module named com - imported by pkg_resources._vendor.appdirs
+missing module named StringIO - imported by six, numpy.lib.utils, numpy.testing._private.utils, scipy._lib.six, numpy.lib.format, pkg_resources._vendor.six
 missing module named __main__ - imported by pkg_resources
 missing module named pkg_resources.extern.packaging - imported by pkg_resources.extern, pkg_resources
 missing module named pkg_resources.extern.appdirs - imported by pkg_resources.extern, pkg_resources
 missing module named 'pkg_resources.extern.six.moves' - imported by pkg_resources, pkg_resources._vendor.packaging.requirements
-missing module named pkg_resources.extern.six - imported by pkg_resources.extern, pkg_resources
+missing module named pkg_resources.extern.six - imported by pkg_resources.extern, pkg_resources, pkg_resources.py31compat
 missing module named resource - imported by posix, C:\Users\Jelle\PycharmProjects\Tacx_Simulant_Verificatie_Script_GIT\Tacx_slip_grip_rol\Tacx_roller_tool.py
 missing module named posix - imported by os, C:\Users\Jelle\PycharmProjects\Tacx_Simulant_Verificatie_Script_GIT\Tacx_slip_grip_rol\Tacx_roller_tool.py
 missing module named _posixsubprocess - imported by subprocess, multiprocessing.util, C:\Users\Jelle\PycharmProjects\Tacx_Simulant_Verificatie_Script_GIT\Tacx_slip_grip_rol\Tacx_roller_tool.py
+missing module named org - imported by pickle, C:\Users\Jelle\PycharmProjects\Tacx_Simulant_Verificatie_Script_GIT\Tacx_slip_grip_rol\Tacx_roller_tool.py
 missing module named readline - imported by cmd, code, pdb, C:\Users\Jelle\PycharmProjects\Tacx_Simulant_Verificatie_Script_GIT\Tacx_slip_grip_rol\Tacx_roller_tool.py
 excluded module named _frozen_importlib - imported by importlib, importlib.abc, C:\Users\Jelle\PycharmProjects\Tacx_Simulant_Verificatie_Script_GIT\Tacx_slip_grip_rol\Tacx_roller_tool.py
 missing module named _frozen_importlib_external - imported by importlib._bootstrap, importlib, importlib.abc, C:\Users\Jelle\PycharmProjects\Tacx_Simulant_Verificatie_Script_GIT\Tacx_slip_grip_rol\Tacx_roller_tool.py
@@ -32,10 +33,9 @@ missing module named 'java.lang' - imported by platform, C:\Users\Jelle\PycharmP
 missing module named vms_lib - imported by platform, C:\Users\Jelle\PycharmProjects\Tacx_Simulant_Verificatie_Script_GIT\Tacx_slip_grip_rol\Tacx_roller_tool.py
 missing module named termios - imported by tty, getpass, C:\Users\Jelle\PycharmProjects\Tacx_Simulant_Verificatie_Script_GIT\Tacx_slip_grip_rol\Tacx_roller_tool.py
 missing module named grp - imported by shutil, tarfile, pathlib, distutils.archive_util, C:\Users\Jelle\PycharmProjects\Tacx_Simulant_Verificatie_Script_GIT\Tacx_slip_grip_rol\Tacx_roller_tool.py
+missing module named pwd - imported by posixpath, shutil, tarfile, http.server, webbrowser, pathlib, distutils.util, distutils.archive_util, netrc, getpass, C:\Users\Jelle\PycharmProjects\Tacx_Simulant_Verificatie_Script_GIT\Tacx_slip_grip_rol\Tacx_roller_tool.py
 missing module named _dummy_threading - imported by dummy_threading, C:\Users\Jelle\PycharmProjects\Tacx_Simulant_Verificatie_Script_GIT\Tacx_slip_grip_rol\Tacx_roller_tool.py
 missing module named 'org.python' - imported by copy, setuptools.sandbox, C:\Users\Jelle\PycharmProjects\Tacx_Simulant_Verificatie_Script_GIT\Tacx_slip_grip_rol\Tacx_roller_tool.py, xml.sax
-missing module named pwd - imported by posixpath, shutil, tarfile, http.server, webbrowser, pathlib, distutils.util, distutils.archive_util, netrc, getpass, C:\Users\Jelle\PycharmProjects\Tacx_Simulant_Verificatie_Script_GIT\Tacx_slip_grip_rol\Tacx_roller_tool.py
-missing module named org - imported by pickle, C:\Users\Jelle\PycharmProjects\Tacx_Simulant_Verificatie_Script_GIT\Tacx_slip_grip_rol\Tacx_roller_tool.py
 missing module named 'IPython.utils' - imported by matplotlib
 missing module named mock - imported by matplotlib
 missing module named pytest - imported by numpy.testing._private.pytesttester, scipy._lib._testutils, matplotlib
@@ -58,7 +58,7 @@ missing module named wincertstore - imported by setuptools.ssl_support
 missing module named 'backports.ssl_match_hostname' - imported by setuptools.ssl_support
 missing module named backports - imported by setuptools.ssl_support
 missing module named 'setuptools.extern.six.moves' - imported by setuptools.dist, setuptools.py33compat, setuptools.command.easy_install, setuptools.sandbox, setuptools.command.setopt, setuptools.package_index, setuptools.ssl_support, setuptools.command.egg_info, setuptools.command.py36compat, setuptools.namespaces, setuptools.msvc
-missing module named setuptools.extern.six - imported by setuptools.extern, setuptools.monkey, setuptools.dist, setuptools.py33compat, setuptools.config, setuptools.command.easy_install, setuptools.sandbox, setuptools.py27compat, setuptools.package_index, setuptools.wheel, setuptools.command.egg_info, setuptools.command.sdist, setuptools.command.bdist_egg, setuptools.unicode_utils, setuptools.glob, setuptools.command.develop
+missing module named setuptools.extern.six - imported by setuptools.extern, setuptools.monkey, setuptools.dist, setuptools.py33compat, setuptools.config, setuptools.unicode_utils, setuptools.command.easy_install, setuptools.sandbox, setuptools.py27compat, setuptools.package_index, setuptools.wheel, setuptools.pep425tags, setuptools.command.egg_info, setuptools.command.sdist, setuptools.command.bdist_egg, setuptools.command.develop
 missing module named 'numpy_distutils.cpuinfo' - imported by numpy.f2py.diagnose
 missing module named 'numpy_distutils.fcompiler' - imported by numpy.f2py.diagnose
 missing module named 'numpy_distutils.command' - imported by numpy.f2py.diagnose

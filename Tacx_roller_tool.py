@@ -54,7 +54,7 @@ class Main(wx.Frame):
         self.font_header_1 = wx.Font(10, family=wx.FONTFAMILY_DECORATIVE, style=wx.FONTSTYLE_NORMAL, weight=wx.FONTWEIGHT_BOLD)
         self.font_normal = wx.Font(10, family=wx.FONTFAMILY_DECORATIVE, style=wx.FONTSTYLE_NORMAL, weight=wx.FONTWEIGHT_NORMAL)
         self.font_big = wx.Font(12, family=wx.FONTFAMILY_DECORATIVE, style=wx.FONTSTYLE_NORMAL, weight=wx.FONTWEIGHT_NORMAL)
-        self.statistics_titles = ["Roller diameter", "Sinking depth roller"]
+        self.statistics_titles = ["Diameter Roller", "Sink Depth Roller"]
 
         for i in range(len(self.statistics_titles)):
             self.data_panel = wx.Panel(self.top_panel, -1, size=(465, 100), pos=(10, 10 + (1.2*i) * 60))
@@ -79,25 +79,25 @@ class Main(wx.Frame):
             self.data_panel_header.SetFont(self.font_header)
 
         self.output_panel = wx.Panel(self.top_panel, -1, style=wx.BORDER_RAISED, size=(305, 160), pos=(10, 190))
-        self.text = wx.StaticText(self.output_panel, label='friction force: \n(bigger = better)', pos=(14, 12))
+        self.text = wx.StaticText(self.output_panel, label='Static Friction Force:', pos=(14, 21))
         self.text.SetFont(self.font_header_1)
-        self.text = wx.StaticText(self.output_panel, label='Max rolling resistance: \n(smaller = better)', pos=(14, 108))
+        self.text = wx.StaticText(self.output_panel, label='Max. Rolling Resistance:', pos=(14, 118))
         self.text.SetFont(self.font_header_1)
-        self.text = wx.StaticText(self.output_panel, label='Normal force: \n', pos=(14, 60))
+        self.text = wx.StaticText(self.output_panel, label='Normal Force (Static): \n', pos=(14, 70))
         self.text.SetFont(self.font_header_1)
-        self.panel_output_3 = wx.Panel(self.output_panel, -1, style=wx.BORDER_SUNKEN, size=(45, 27), pos=(230, 17))
+        self.panel_output_3 = wx.Panel(self.output_panel, -1, style=wx.BORDER_SUNKEN, size=(55, 27), pos=(220, 17))
         self.data_output_text = wx.StaticText(self.output_panel, label='N', pos=(280, 21))
         self.data_output_text.SetFont(self.font_big)
         self.data_panel_friction= wx.StaticText(self.panel_output_3, label='30', pos=(4, 2))
         self.data_panel_friction.SetFont(self.font_big)
 
-        self.panel_output_4 = wx.Panel(self.output_panel, -1, style=wx.BORDER_SUNKEN, size=(45, 27), pos=(230, 65))
+        self.panel_output_4 = wx.Panel(self.output_panel, -1, style=wx.BORDER_SUNKEN, size=(55, 27), pos=(220, 65))
         self.data_output_text = wx.StaticText(self.output_panel, label='N', pos=(280, 69))
         self.data_output_text.SetFont(self.font_big)
         self.data_panel_normal_force = wx.StaticText(self.panel_output_4, label='300', pos=(4, 2))
         self.data_panel_normal_force.SetFont(self.font_big)
 
-        self.panel_output_5 = wx.Panel(self.output_panel, -1, style=wx.BORDER_SUNKEN, size=(45, 27), pos=(230, 113))
+        self.panel_output_5 = wx.Panel(self.output_panel, -1, style=wx.BORDER_SUNKEN, size=(55, 27), pos=(220, 113))
         self.data_output_text = wx.StaticText(self.output_panel, label='N', pos=(280, 117))
         self.data_output_text.SetFont(self.font_big)
         self.data_panel_resistance = wx.StaticText(self.panel_output_5, label='30', pos=(4, 2))
@@ -114,6 +114,8 @@ class Main(wx.Frame):
 
         # Create status bar
         self.statusbar = self.CreateStatusBar()
+        self.statusbar.SetStatusText('Right-click graph for zooming / graph options')
+        self.top_panel.Bind(wx.EVT_ENTER_WINDOW, self.on_graph_hover)
 
         # Create parameter which contains all the tested data. These are the parameters which are fixed and will be
         # used to test the traction and resistance.
@@ -236,7 +238,7 @@ class Main(wx.Frame):
         self.figure_panel = wx.Panel(self.top_panel, -1, size=(400, 400), pos=(480, -20))
         self.figure_panel.SetBackgroundColour((255, 255, 255))
         self.figure = wxmplot.PlotPanel(self.figure_panel, size=(400, 400), dpi=100, fontsize=2, axisbg='#FFFFFF')
-        self.figure.oplot(numpy.array(self.speed), numpy.array(self.rolling_resistance), framecolor='white')
+        self.figure.oplot(numpy.array(self.speed), numpy.array(self.rolling_resistance), framecolor='white',xmin=0, xmax=50, ymin=0, ymax=16)
 
         # Figure cosmetics
         self.figure.set_xlabel("Velocity [km/h]")
@@ -391,6 +393,10 @@ class Main(wx.Frame):
 
     def on_save_hover(self, event):
         self.statusbar.SetStatusText('Save the entered inputs to use them in calculations')
+        event.Skip()
+
+    def on_graph_hover(self, event):
+        self.statusbar.SetStatusText('Right-click to see zooming / graph options')
         event.Skip()
 
 
