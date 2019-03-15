@@ -114,7 +114,7 @@ class Main(wx.Frame):
 
         # Create status bar
         self.statusbar = self.CreateStatusBar()
-        self.statusbar.SetStatusText('Right-click graph for zooming / graph options')
+        self.statusbar.SetStatusText('Right-click on graph for zooming / graph options')
         self.top_panel.Bind(wx.EVT_ENTER_WINDOW, self.on_graph_hover)
 
         # Create parameter which contains all the tested data. These are the parameters which are fixed and will be
@@ -318,12 +318,11 @@ class Main(wx.Frame):
             dummy7 = dummy10[2] + (dummy10[2] - dummy10[3])/ (self.depth[index_depth[0]] - self.depth[index_depth[1]]) * abs(self.depth[index_depth[0]] - self.value_slider_2)
             self.normal_force = dummy6 + (dummy6 - dummy7) / (self.diameter[index_diameter[0]]-self.diameter[index_diameter[2]]) * abs(self.diameter[index_diameter[0]]-self.value_slider_1)
 
-
         self.data_panel_resistance.SetLabel(str(round(max(self.rolling_resistance))))
         self.data_panel_friction.SetLabel(str(round(self.friction)))
         self.data_panel_normal_force.SetLabel(str(round(self.normal_force, 1)))
 
-        # Updating the plot
+        # Updating the plot
         if self.begin == False:
             self.figure.update_line(1, numpy.array(self.speed), numpy.array(self.rolling_resistance), draw=True)
 
@@ -396,7 +395,7 @@ class Main(wx.Frame):
         event.Skip()
 
     def on_graph_hover(self, event):
-        self.statusbar.SetStatusText('Right-click to see zooming / graph options')
+        self.statusbar.SetStatusText('Right-click on graph to see zooming / graph options')
         event.Skip()
 
 
